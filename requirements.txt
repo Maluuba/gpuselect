@@ -1,1 +1,1 @@
-nvidia_smi
+nvidia-ml-py
