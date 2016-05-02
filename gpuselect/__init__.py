@@ -10,19 +10,22 @@ logger = logging.getLogger("gpuselect")
 
 def get_gpu():
     n_gpus = gs.n_gpus()
-    U = []
+    G, M = [], []
     for i in xrange(n_gpus):
         bus_id = gs.bus_id(i)
         h = nvidia_smi.nvmlDeviceGetHandleByPciBusId("0000:%d:00.0" % bus_id)
 
-        utils = []
+        memutil, gpuutil = [], []
         for k in xrange(100):
             util = nvidia_smi.nvmlDeviceGetUtilizationRates(h)
-            utils.append((2*util.gpu + util.memory)/3.)
+            memutil.append(util.memory)
+            gpuutil.append(util.gpu)
             time.sleep(.01)
-        U.append(np.mean(utils))
-    print "GPU Utilization:", U
-    return np.argmin(U)
+        G.append(np.mean(gpuutil))
+        M.append(np.mean(memutil))
+    print "GPU Utilization:", G
+    print "Mem Utilization:", M
+    return np.argmin(2*np.array(G) + np.array(M))
 
 def get_default_device():
     dev = 'cpu'
