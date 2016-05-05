@@ -17,7 +17,7 @@ setup( name='gpuselect',
           Extension('gpuselect._gpuselect',
                     ['gpuselect/gpuselect.cpp'],
                     include_dirs=['/usr/local/cuda/include', '/usr/include/python2.7'],
-                    library_dirs=['/usr/local/cuda/lib64'],
+                    library_dirs=['/usr/local/cuda/lib64', '/usr/lib64'],
                     libraries=['cudart', 'cuda', 'boost_python-py27', 'python2.7'],
                     extra_compile_args=['-fPIC']
                     )
