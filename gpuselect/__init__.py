@@ -17,7 +17,6 @@ def get_gpu(gpu_weight, mem_weight):
         memutil, gpuutil = [], []
         for k in xrange(100):
             util = nvidia_smi.nvmlDeviceGetUtilizationRates(h)
-            procs = nvidia_smi.nvmlDeviceGetComputeRunningProcesses(h)
             memory = nvidia_smi.nvmlDeviceGetMemoryInfo(h)
             memutil.append(float(memory.used) / memory.total)
             gpuutil.append(float(util.gpu) / 100)
