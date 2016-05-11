@@ -40,7 +40,7 @@ def get_default_device():
             if cfg_dev is not None:
                 dev = cfg_dev
     if 'THEANO_FLAGS' in os.environ:
-        res = re.match(r'device=(\w+)', os.environ['THEANO_FLAGS'])
+        res = re.match(r'.*\bdevice=(\w+)', os.environ['THEANO_FLAGS'])
         if res:
             dev = res.group(1)
     return dev
