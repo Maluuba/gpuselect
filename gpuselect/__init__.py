@@ -8,7 +8,7 @@ import logging
 import ConfigParser
 logger = logging.getLogger("gpuselect")
 
-def get_gpu():
+def get_gpu(gpu_weight, mem_weight):
     n_gpus = gs.n_gpus()
     G, M = [], []
     for i in xrange(n_gpus):
@@ -25,7 +25,9 @@ def get_gpu():
         M.append(np.mean(memutil))
     print "GPU Utilization:", G
     print "Mem Utilization:", M
-    return np.argmin(2*np.array(G) + np.array(M))
+    print "GPU Weight     :", gpu_weight
+    print "Mem Weight     :", mem_weight
+    return np.argmin(gpu_weight*np.array(G) + mem_weight*np.array(M))
 
 def get_default_device():
     dev = 'cpu'
@@ -49,7 +51,9 @@ if device == 'gpu':
     nvidia_smi.nvmlInit()
     print "default is", device
     if device == 'gpu':
-        gpu = get_gpu()
+        gpu_weight = float(os.environ.get('GPUSELECT_GPU_WEIGHT', 2))
+        mem_weight = float(os.environ.get('GPUSELECT_MEM_WEIGHT', 1))
+        gpu = get_gpu(gpu_weight, mem_weight)
         if 'THEANO_FLAGS' in os.environ:
             flags = os.environ['THEANO_FLAGS']
         else:
