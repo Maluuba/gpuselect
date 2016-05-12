@@ -46,5 +46,5 @@ Thus, the strategy employed by this script is:
 2. Get gpu/memory utilization of device via nvml for given bus id
 3. Weight gpu/memory utilization
 4. Select the least utilized GPU, `X`
-5. Set append `device=gpuX` to `THEANO_FLAGS`.
+5. Append `device=gpuX` to `THEANO_FLAGS`.
 6. You load theano and everything is good.
