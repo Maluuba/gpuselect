@@ -13,7 +13,7 @@ Installation
 ------------
 
 ```bash
-pip install git+https://github.com/temporaer/gpuselect@master#egg=gpuselect
+pip install git+https://github.com/Maluuba/gpuselect@master#egg=gpuselect
 ```
 
 
