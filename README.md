@@ -16,6 +16,10 @@ Installation
 pip install git+https://github.com/Maluuba/gpuselect@master#egg=gpuselect
 ```
 
+For Python 3, ensure that your `libboost_python` is compiled for Python 3.
+If you are using conda, you can ensure this by doing `conda install boost` in
+your Python 3 environment.
+
 
 Usage
 -----
