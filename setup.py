@@ -6,7 +6,7 @@ install_reqs = parse_requirements('requirements.txt', session=False)
 reqs = [str(ir.req) for ir in install_reqs]
 
 setup( name='gpuselect',
-      version='1.0',
+      version='1.1',
       description='select a gpu based on utilization',
       author='Hannes Schulz',
       author_email='hannes.schulz@maluuba.com',
