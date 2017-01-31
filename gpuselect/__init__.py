@@ -1,4 +1,5 @@
 from __future__ import print_function
+
 import os
 import re
 import time
@@ -9,14 +10,15 @@ import logging
 import ConfigParser
 logger = logging.getLogger("gpuselect")
 
+
 def get_gpu(gpu_weight, mem_weight):
     n_gpus = gs.n_gpus()
     G, M = [], []
-    for i in xrange(n_gpus):
+    for i in range(n_gpus):
         bus_id = gs.bus_id(i)
         h = nvidia_smi.nvmlDeviceGetHandleByPciBusId("0000:%02X:00.0" % bus_id)
         memutil, gpuutil = [], []
-        for k in xrange(100):
+        for k in range(100):
             util = nvidia_smi.nvmlDeviceGetUtilizationRates(h)
             memory = nvidia_smi.nvmlDeviceGetMemoryInfo(h)
             memutil.append(float(memory.used) / memory.total)
@@ -24,11 +26,12 @@ def get_gpu(gpu_weight, mem_weight):
             time.sleep(.01)
         G.append(np.mean(gpuutil))
         M.append(np.mean(memutil))
-    print ("GPU Utilization:", G)
-    print ("Mem Utilization:", M)
-    print ("GPU Weight     :", gpu_weight)
-    print ("Mem Weight     :", mem_weight)
+    print("GPU Utilization:", G)
+    print("Mem Utilization:", M)
+    print("GPU Weight     :", gpu_weight)
+    print("Mem Weight     :", mem_weight)
     return np.argmin(gpu_weight*np.array(G) + mem_weight*np.array(M))
+
 
 def get_default_device():
     dev = 'cpu'
@@ -50,7 +53,7 @@ def get_default_device():
 device = get_default_device()
 if device == 'gpu':
     nvidia_smi.nvmlInit()
-    print ("default is", device)
+    print("default is", device)
     if device == 'gpu':
         gpu_weight = float(os.environ.get('GPUSELECT_GPU_WEIGHT', 2))
         mem_weight = float(os.environ.get('GPUSELECT_MEM_WEIGHT', 1))
@@ -60,8 +63,8 @@ if device == 'gpu':
         else:
             flags = ""
         os.environ['THEANO_FLAGS'] = flags + ",device=gpu%d" % gpu
-        print ("Using device gpu", gpu)
+        print("Using device gpu", gpu)
 
 if __name__ == "__main__":
     import theano
-    print (theano.config.device)
+    print(theano.config.device)
