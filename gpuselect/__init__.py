@@ -16,7 +16,7 @@ def get_gpu(gpu_weight, mem_weight):
     G, M = [], []
     for i in range(n_gpus):
         bus_id = gs.bus_id(i)
-        h = nvidia_smi.nvmlDeviceGetHandleByPciBusId("0000:%02X:00.0" % bus_id)
+        h = nvidia_smi.nvmlDeviceGetHandleByPciBusId(bus_id)
         memutil, gpuutil = [], []
         for k in range(100):
             util = nvidia_smi.nvmlDeviceGetUtilizationRates(h)
@@ -51,20 +51,20 @@ def get_default_device():
 
 
 device = get_default_device()
-if device == 'gpu':
+if device in ('gpu', 'cuda'):
     nvidia_smi.nvmlInit()
     print("default is", device)
-    if device == 'gpu':
-        gpu_weight = float(os.environ.get('GPUSELECT_GPU_WEIGHT', 2))
-        mem_weight = float(os.environ.get('GPUSELECT_MEM_WEIGHT', 1))
-        gpu = get_gpu(gpu_weight, mem_weight)
-        if 'THEANO_FLAGS' in os.environ:
-            flags = os.environ['THEANO_FLAGS']
-        else:
-            flags = ""
-        os.environ['THEANO_FLAGS'] = flags + ",device=gpu%d" % gpu
-        os.environ['CUDA_VISIBLE_DEVICES'] = str(gpu)
-        print("Using device gpu", gpu)
+
+    gpu_weight = float(os.environ.get('GPUSELECT_GPU_WEIGHT', 2))
+    mem_weight = float(os.environ.get('GPUSELECT_MEM_WEIGHT', 1))
+    gpu = get_gpu(gpu_weight, mem_weight)
+    if 'THEANO_FLAGS' in os.environ:
+        flags = os.environ['THEANO_FLAGS']
+    else:
+        flags = ""
+    os.environ['THEANO_FLAGS'] = flags + ",device=%s%d" % (device, gpu)
+    os.environ['CUDA_VISIBLE_DEVICES'] = str(gpu)
+    print("Using device gpu", gpu)
 
 if __name__ == "__main__":
     import theano
