@@ -63,6 +63,7 @@ if device == 'gpu':
         else:
             flags = ""
         os.environ['THEANO_FLAGS'] = flags + ",device=gpu%d" % gpu
+        os.environ['CUDA_VISIBLE_DEVICES'] = str(gpu)
         print("Using device gpu", gpu)
 
 if __name__ == "__main__":
