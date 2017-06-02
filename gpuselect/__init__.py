@@ -51,20 +51,20 @@ def get_default_device():
 
 
 device = get_default_device()
-if device == 'gpu':
+if device in ('gpu', 'cuda'):
     nvidia_smi.nvmlInit()
     print("default is", device)
-    if device == 'gpu':
-        gpu_weight = float(os.environ.get('GPUSELECT_GPU_WEIGHT', 2))
-        mem_weight = float(os.environ.get('GPUSELECT_MEM_WEIGHT', 1))
-        gpu = get_gpu(gpu_weight, mem_weight)
-        if 'THEANO_FLAGS' in os.environ:
-            flags = os.environ['THEANO_FLAGS']
-        else:
-            flags = ""
-        os.environ['THEANO_FLAGS'] = flags + ",device=gpu%d" % gpu
-        os.environ['CUDA_VISIBLE_DEVICES'] = str(gpu)
-        print("Using device gpu", gpu)
+
+    gpu_weight = float(os.environ.get('GPUSELECT_GPU_WEIGHT', 2))
+    mem_weight = float(os.environ.get('GPUSELECT_MEM_WEIGHT', 1))
+    gpu = get_gpu(gpu_weight, mem_weight)
+    if 'THEANO_FLAGS' in os.environ:
+        flags = os.environ['THEANO_FLAGS']
+    else:
+        flags = ""
+    os.environ['THEANO_FLAGS'] = flags + ",device=%s%d" % (device, gpu)
+    os.environ['CUDA_VISIBLE_DEVICES'] = str(gpu)
+    print("Using device gpu", gpu)
 
 if __name__ == "__main__":
     import theano
