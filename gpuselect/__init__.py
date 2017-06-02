@@ -16,7 +16,7 @@ def get_gpu(gpu_weight, mem_weight):
     G, M = [], []
     for i in range(n_gpus):
         bus_id = gs.bus_id(i)
-        h = nvidia_smi.nvmlDeviceGetHandleByPciBusId("0000:%02X:00.0" % bus_id)
+        h = nvidia_smi.nvmlDeviceGetHandleByPciBusId(bus_id)
         memutil, gpuutil = [], []
         for k in range(100):
             util = nvidia_smi.nvmlDeviceGetUtilizationRates(h)

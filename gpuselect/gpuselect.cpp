@@ -2,6 +2,7 @@
 #include <cuda.h>
 
 #include <boost/python.hpp>
+#include <boost/format.hpp>
 
 int n_gpus(){
     int cnt;
@@ -11,10 +12,10 @@ int n_gpus(){
 void reset(){
     cudaDeviceReset();
 }
-int bus_id(int deviceId){
+std::string bus_id(int deviceId){
     cudaDeviceProp dp;
     cudaGetDeviceProperties(&dp, deviceId);
-    return dp.pciBusID;
+    return (boost::format("%04X:%02X:%02X.0") % dp.pciDomainID % dp.pciBusID % dp.pciDeviceID).str();
 }
 double mem_utilization(int deviceId){
     cudaSetDevice(deviceId);
