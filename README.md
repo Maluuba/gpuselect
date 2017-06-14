@@ -13,7 +13,7 @@ Installation
 ------------
 
 ```bash
-pip install git+https://github.com/Maluuba/gpuselect@master#egg=gpuselect
+pip install --process-dependency-links git+https://github.com/Maluuba/gpuselect@master#egg=gpuselect
 ```
 
 For Python 3, ensure that your `libboost_python` is compiled for Python 3.
